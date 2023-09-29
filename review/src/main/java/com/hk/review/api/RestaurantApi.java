@@ -1,6 +1,7 @@
 package com.hk.review.api;
 
 
+import com.hk.review.api.request.CreateAndEditRestaurantRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,15 +20,18 @@ public class RestaurantApi {
     }
 
     @PostMapping("/restaurant")
-    public String createRestaurant() {
-        return "this is createRestaurant";
+    public String createRestaurant(
+            @RequestBody CreateAndEditRestaurantRequest request
+            ) {
+        return "this is createRestaurant, name = " + request.getName();
     }
 
     @PutMapping("/restaurant/{restaurantId}")
     public String editRestaurant(
-            @PathVariable Long restaurantId
+            @PathVariable Long restaurantId,
+            @RequestBody CreateAndEditRestaurantRequest request
     ){
-        return "this is editRestaurant " + restaurantId;
+        return "this is editRestaurant " + restaurantId + "address = " + request.getAddress();
     }
 
     @DeleteMapping("/restaurant/{restaurantId}")
