@@ -17,4 +17,10 @@ public class TestService {
         testRepository.save(testEntity);
     }
 
+    public void delete(Long id){
+        TestEntity testEntity = testRepository.findById(id).get();
+        testRepository.delete(testEntity);
+
+    }
+
 }
