@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class TestService {
@@ -27,6 +29,14 @@ public class TestService {
         TestEntity testEntity = testRepository.findById(id).get();
         testRepository.delete(testEntity);
 
+    }
+
+    public List<TestEntity> findAllByNamedByJPA(String name){
+        return testRepository.findAllByName(name);
+    }
+
+    public List<TestEntity> findAllByNameByQuerydsl(String name){
+        return testRepository.findAllByNameByQuerydsl(name);
     }
 
 }
