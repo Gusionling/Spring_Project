@@ -15,7 +15,21 @@ public class TestEntity {
     private String name;
     private Integer age;
 
+    public Long getId() {
+        return id;
+    }
+
     public TestEntity(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public TestEntity(){
+
+    }
+
+
+    public void changeNameAndAge(String name, Integer age) {
         this.name = name;
         this.age = age;
     }

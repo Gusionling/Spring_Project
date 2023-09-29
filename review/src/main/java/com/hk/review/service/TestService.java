@@ -17,6 +17,12 @@ public class TestService {
         testRepository.save(testEntity);
     }
 
+    public void update(Long id, String name, Integer age) {
+        TestEntity testEntity = testRepository.findById(id).orElseThrow();
+        testEntity.changeNameAndAge(name, age);
+        testRepository.save(testEntity);
+    }
+
     public void delete(Long id){
         TestEntity testEntity = testRepository.findById(id).get();
         testRepository.delete(testEntity);
