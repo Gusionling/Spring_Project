@@ -72,6 +72,27 @@ jobs:
             exit 1
           fi
 
+      - name: Check port availability
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.LIVE_SERVER_IP }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script_stop: true
+          script: |
+            sudo ss -tuln | grep ':8080' && echo "Port 8080 is in use" || echo "Port 8080 is available"
+            sudo ss -tuln | grep ':8081' && echo "Port 8081 is in use" || echo "Port 8081 is available"
+
+      - name: Stop previous instance
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.LIVE_SERVER_IP }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script_stop: true
+          script: |
+            sudo docker-compose -f docker-compose-${{env.CURRENT_UPSTREAM}}.yml down
+
       - name: Docker compose
         uses: appleboy/ssh-action@master
         with:
