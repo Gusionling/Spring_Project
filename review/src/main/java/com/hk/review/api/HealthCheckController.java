@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 @RestController
-@RequestMapping("/health")
+@RequestMapping
 @Tag(name = "health 컨트롤러", description = "서버 상태 체크")
 public class HealthCheckController {
 
