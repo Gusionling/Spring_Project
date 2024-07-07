@@ -27,7 +27,6 @@ jobs:
           chmod 777 ./gradlew
           ./gradlew clean build -x test
 
-      # Gradle 빌드 결과를 확인합니다.
       - name: List build output
         run: |
           ls -la review/build/libs
@@ -84,23 +83,21 @@ jobs:
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/live_server:latest
             sudo docker-compose -f docker-compose-${{env.TARGET_UPSTREAM}}.yml up -d
 
-      # 애플리케이션 로그 확인
-      - name: Check application logs
+      - name: Check Docker Compose logs
         uses: appleboy/ssh-action@master
         with:
           username: ubuntu
           host: ${{ secrets.LIVE_SERVER_IP }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script_stop: true
-          script: |
-            sudo docker logs ${{ secrets.DOCKERHUB_USERNAME }}/live_server
+          script: sudo docker-compose -f docker-compose-${{env.TARGET_UPSTREAM}}.yml logs
 
       - name: Check deploy server URL
         uses: jtalk/url-health-check-action@v3
         with:
           url: http://${{ secrets.LIVE_SERVER_IP }}:${{env.STOPPED_PORT}}/env
-          max-attempts: 3  # 시도 횟수를 늘려 애플리케이션 시작을 기다립니다.
-          retry-delay: 3s  # 재시도 간격을 설정합니다.
+          max-attempts: 3
+          retry-delay: 3s
 
       - name: Change nginx upstream
         uses: appleboy/ssh-action@master
