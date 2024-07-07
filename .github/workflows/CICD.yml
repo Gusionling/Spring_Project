@@ -27,7 +27,7 @@ jobs:
           chmod 777 ./gradlew
           ./gradlew clean build -x test
 
-      # 추가된 단계: Gradle 빌드 결과를 출력하여 확인합니다.
+      # Gradle 빌드 결과를 확인합니다.
       - name: List build output
         run: |
           ls -la review/build/libs
@@ -41,7 +41,6 @@ jobs:
       - name: Build Docker
         run: |
           cd review
-          ls -la build/libs  # Docker 빌드 전에 빌드된 JAR 파일을 확인합니다.
           docker build --platform linux/amd64 -t ${{ secrets.DOCKERHUB_USERNAME }}/live_server .
 
       - name: Push Docker
@@ -84,13 +83,17 @@ jobs:
           script: |
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/live_server:latest
             sudo docker-compose -f docker-compose-${{env.TARGET_UPSTREAM}}.yml up -d
+
+      # 추가된 대기 시간: 애플리케이션이 시작될 시간을 확보합니다.
+      - name: Wait for application to start
+        run: sleep 30
       
       - name: Check deploy server URL
         uses: jtalk/url-health-check-action@v3
         with:
           url: http://${{ secrets.LIVE_SERVER_IP }}:${{env.STOPPED_PORT}}/env
-          max-attempts: 3
-          retry-delay: 10s
+          max-attempts: 10  # 시도 횟수를 늘려 애플리케이션 시작을 기다립니다.
+          retry-delay: 10s  # 재시도 간격을 설정합니다.
 
       - name: Change nginx upstream
         uses: appleboy/ssh-action@master
