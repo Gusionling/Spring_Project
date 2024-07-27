@@ -1,6 +1,7 @@
 package com.hk.review.security.config;
 
 import com.hk.review.contrant.Constrants;
+import com.hk.review.security.handler.jwt.JwtAuthEntryPoint;
 import com.hk.review.security.handler.singout.CustomLogoutResultHandler;
 import com.hk.review.security.handler.singout.CustomSignOutProcessHandler;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class SecurityConfig {
 
     private final CustomSignOutProcessHandler customSignOutProcessHandler;
     private final CustomLogoutResultHandler customSignOutResultHandler;
+    private final JwtAuthEntryPoint jwtAuthEntryPoint;
 
     @Bean
     protected SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity) throws Exception {
@@ -36,12 +38,18 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
 
                 )
-                .logout(configurer->
+                .logout(configurer ->
                         configurer
                                 .logoutUrl("/api/v1/auth/sign-out")
                                 .addLogoutHandler(customSignOutProcessHandler)
                                 .logoutSuccessHandler(customSignOutResultHandler)
                 )
+                .exceptionHandling(configurer ->
+                        configurer
+                                .authenticationEntryPoint(jwtAuthEntryPoint)
+                )
+
+
                 .build();
     }
 
