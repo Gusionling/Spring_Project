@@ -25,9 +25,11 @@ import java.util.Collections;
 public class SwaggerConfiguration {
 
     private final SecurityScheme securityScheme = new SecurityScheme()
-            .type(SecurityScheme.Type.APIKEY)
+            .type(SecurityScheme.Type.HTTP)
             .in(SecurityScheme.In.HEADER)
-            .name("Authorization");
+            .name("Authorization")
+            .scheme("bearer")
+            .bearerFormat("JWT");
 
     {
         SpringDocUtils.getConfig().replaceWithSchema(Color.class,
@@ -58,7 +60,7 @@ public class SwaggerConfiguration {
     @Bean
     public OpenAPI openApi() {
         String description = "Review Swagger setting";
-        String securityRequirementName = "bearerAuth";
+        String securityRequirementName = "JWT TOKEN";
 
         // 파일 업로드를 위한 스웨거 정의 추가
         Schema fileSchema = new Schema();
@@ -69,7 +71,8 @@ public class SwaggerConfiguration {
                 .servers(Collections.singletonList(new Server().url("/")))
                 .security(Collections.singletonList(new SecurityRequirement().addList(securityRequirementName)))
                 .components(new Components()
-                        .addSecuritySchemes(securityRequirementName, securityScheme)
+                        .addSecuritySchemes(securityRequirementName,
+                                securityScheme)
                         .addSchemas("file", fileSchema)) //파일 스키마 추가
                 .info(new Info()
                         .title("API")
