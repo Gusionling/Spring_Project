@@ -1,9 +1,12 @@
 package com.hk.review.security.config;
 
 import com.hk.review.contrant.Constrants;
+import com.hk.review.security.filter.JwtAuthenticationFilter;
 import com.hk.review.security.handler.jwt.JwtAuthEntryPoint;
 import com.hk.review.security.handler.singout.CustomLogoutResultHandler;
 import com.hk.review.security.handler.singout.CustomSignOutProcessHandler;
+import com.hk.review.security.service.CustomUserDetailService;
+import com.hk.review.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +28,8 @@ public class SecurityConfig {
     private final CustomSignOutProcessHandler customSignOutProcessHandler;
     private final CustomLogoutResultHandler customSignOutResultHandler;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
+    private final CustomUserDetailService customUserDetailService;
+    private final JwtUtil jwtUtil;
 
     @Bean
     protected SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity) throws Exception {
@@ -54,11 +59,8 @@ public class SecurityConfig {
                 )
 
                 .addFilterBefore(
-                        new JwtAuthenticationFilter(),
-                        LogoutFilter.class)
-                )
-
-
+                        new JwtAuthenticationFilter(jwtUtil, customUserDetailService),
+                                LogoutFilter.class)
                 .getOrBuild();
     }
 
