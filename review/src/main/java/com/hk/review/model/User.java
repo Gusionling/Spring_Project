@@ -40,7 +40,7 @@ public class User {
         this.nickname = Constrants.USER_NICKNAME_PREFIX + serialId;
     }
 
-    public static User singUp(Long serialId){
+    public static User signUp(Long serialId){
         return User.builder()
                 .serialId(serialId)
                 .build();
