@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findBySerialId(Long serialId);
 
     @Query("select u.id as id from User u where u.id = :id and u.isLogin = true")
-    Optional<UserSecurityForm> findSecurityFormById(Long Id);
+    Optional<UserSecurityForm> findSecurityFormById(Long id);
 
     //@Modifying은 데이터베이스를 수정하는 쿼리에 사용된다. 보통 update, delete 쿼리와 함께 사용된다.
     //ClearAutomatically 속성은 수정 작업 후에 영속성 컨텍스를 지우도록 한다. 이는 변경된 엔티티 상태와 데이터베이스 상태를 일치시키기 위함이다.
