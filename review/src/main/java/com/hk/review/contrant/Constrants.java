@@ -4,8 +4,13 @@ import java.util.List;
 
 public class Constrants {
 
-    public static final String USER_NICKNAME_PREFIX = "USER_";
+    public static final String API_PREFIX = "/api/v1";
+    public static String USER_ID_CLAIM_NAME = "uid";
+    public static String BEARER_PREFIX = "Bearer ";
+    public static String AUTHORIZATION_HEADER = "Authorization";
     public static String USER_ROLE = "ROLE_USER";
+    public static final String REGION_TYPE = "H";
+    public static final String USER_NICKNAME_PREFIX = "USER_";
 
     public static List<String> NO_NEED_AUTH_URLS = List.of(
             "/v3/api-docs.html/**",

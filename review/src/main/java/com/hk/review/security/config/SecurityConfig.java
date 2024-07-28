@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
@@ -50,6 +51,11 @@ public class SecurityConfig {
                 .exceptionHandling(configurer ->
                         configurer
                                 .authenticationEntryPoint(jwtAuthEntryPoint)
+                )
+
+                .addFilterBefore(
+                        new JwtAuthenticationFilter(),
+                        LogoutFilter.class)
                 )
 
 
