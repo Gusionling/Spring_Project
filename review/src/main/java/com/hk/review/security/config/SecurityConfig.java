@@ -2,6 +2,7 @@ package com.hk.review.security.config;
 
 import com.hk.review.contrant.Constrants;
 import com.hk.review.security.filter.JwtAuthenticationFilter;
+import com.hk.review.security.filter.JwtExceptionFilter;
 import com.hk.review.security.handler.jwt.JwtAuthEntryPoint;
 import com.hk.review.security.handler.singout.CustomLogoutResultHandler;
 import com.hk.review.security.handler.singout.CustomSignOutProcessHandler;
@@ -61,6 +62,8 @@ public class SecurityConfig {
                 .addFilterBefore(
                         new JwtAuthenticationFilter(jwtUtil, customUserDetailService),
                                 LogoutFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(),
+                        JwtAuthenticationFilter.class)
                 .getOrBuild();
     }
 
