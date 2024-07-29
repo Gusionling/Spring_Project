@@ -23,6 +23,9 @@ public class User {
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
+    @Column(name = "email", unique = true)
+    private String email;
+
     @Column(name = "refresh_token")
     private String refreshToken;
 
