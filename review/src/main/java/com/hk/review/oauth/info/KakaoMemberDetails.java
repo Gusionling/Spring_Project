@@ -19,6 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KakaoMemberDetails implements OAuth2User {
 
+    @Getter
     private final Long id; //카카오 사용자 provider ID
     @Getter
     private final ERole role;
@@ -53,9 +54,9 @@ public class KakaoMemberDetails implements OAuth2User {
         return authorities;
     }
 
+
     @Override
     public String getName() {
-        return id.toString();
+        return "Kakao Member Details";
     }
-
 }

@@ -1,10 +1,13 @@
 package com.hk.review.security.config;
 
 import com.hk.review.contrant.Constrants;
+import com.hk.review.oauth.service.KakaoMemberDetailService;
 import com.hk.review.security.filter.GlobalLoggerFilter;
 import com.hk.review.security.filter.JwtAuthenticationFilter;
 import com.hk.review.security.filter.JwtExceptionFilter;
 import com.hk.review.security.handler.jwt.JwtAuthEntryPoint;
+import com.hk.review.security.handler.oauth.OAuth2AuthenticationSuccessHandler;
+import com.hk.review.security.handler.oauth.OAuth2FailureHandler;
 import com.hk.review.security.handler.singout.CustomLogoutResultHandler;
 import com.hk.review.security.handler.singout.CustomSignOutProcessHandler;
 import com.hk.review.security.service.CustomUserDetailService;
@@ -17,6 +20,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -32,6 +36,9 @@ public class SecurityConfig {
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private final CustomUserDetailService customUserDetailService;
     private final JwtUtil jwtUtil;
+    private final KakaoMemberDetailService KakaoMemberDetailService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
 
     @Bean
     protected SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity) throws Exception {
@@ -59,6 +66,14 @@ public class SecurityConfig {
                         configurer
                                 .authenticationEntryPoint(jwtAuthEntryPoint)
                 )
+                .oauth2Login(oAuth2Login ->{
+                    oAuth2Login.userInfoEndpoint(userInfoEndpointConfig ->
+                            userInfoEndpointConfig.userService(KakaoMemberDetailService)
+                    );
+                    oAuth2Login
+                            .successHandler(oAuth2AuthenticationSuccessHandler)
+                            .failureHandler(oAuth2FailureHandler);
+                })
 
                 .addFilterBefore(
                         new JwtAuthenticationFilter(jwtUtil, customUserDetailService),

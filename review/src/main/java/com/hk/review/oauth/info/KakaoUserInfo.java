@@ -3,6 +3,7 @@ package com.hk.review.oauth.info;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hk.review.contrant.Constrants;
+import lombok.Getter;
 
 import java.util.Map;
 
@@ -10,14 +11,14 @@ import static com.hk.review.contrant.Constrants.KAKAO_ACCOUNT;
 
 public class KakaoUserInfo {
 
-    private Map<String, Object> attributes;
+    @Getter private Map<String, Object> attributes;
 
     public KakaoUserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 
     public Long getId(){
-        return Long.parseLong((String) attributes.get(Constrants.KAKAO_ID));
+        return (Long) attributes.get(Constrants.KAKAO_ID);
     }
 
     public String getEmail() {

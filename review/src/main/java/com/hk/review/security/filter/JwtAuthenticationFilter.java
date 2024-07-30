@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -28,9 +29,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailService customUserDetailService;
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String requestURI = request.getRequestURI();
+        System.out.println("JwtAuthenticationFilter: Processing request URI: " + requestURI);
+
         String token = HeaderUtil.refineHeader(request, Constrants.AUTHORIZATION_HEADER, Constrants.BEARER_PREFIX)
                 .orElseThrow(() -> new IllegalArgumentException("Authorization Header Is Not Found!"));
         Claims claims = jwtUtil.validateToken(token);
@@ -51,7 +56,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return Constrants.NO_NEED_AUTH_URLS.contains(request.getRequestURI());
+        return Constrants.NO_NEED_AUTH_URLS.stream()
+                .anyMatch(pattern -> pathMatcher.match(pattern, request.getRequestURI()));
     }
     //
 }

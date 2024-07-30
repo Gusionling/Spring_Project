@@ -22,7 +22,12 @@ public class Constrants {
             "/v3/api-docs.html/**",
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "/api/v1/auth/login"
+            "/api/v1/auth/login",
+            "/api/v1/auth/**",
+            "/oauth2/**",
+            "/login/oauth2/**",
+            //하.. 이것도 넣어야 되나...
+            "/favicon.ico"
     );
 
 
