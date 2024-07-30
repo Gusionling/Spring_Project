@@ -31,6 +31,7 @@ public class AuthService {
         } else {
             user = userRepository.save(User.signUp(userLoginDto.providerId()));
             isNewUser = true;
+            user.setIsNewUser(false);
         }
 
         JwtTokenDto jwtTokenDto = jwtUtil.generateTokens(user.getId(), ERole.USER);

@@ -1,6 +1,7 @@
 package com.hk.review.repository;
 
 import com.hk.review.model.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     //@Modifying은 데이터베이스를 수정하는 쿼리에 사용된다. 보통 update, delete 쿼리와 함께 사용된다.
     //ClearAutomatically 속성은 수정 작업 후에 영속성 컨텍스를 지우도록 한다. 이는 변경된 엔티티 상태와 데이터베이스 상태를 일치시키기 위함이다.
+    @Transactional
     @Modifying(clearAutomatically = true)
     @Query("update User u set u.refreshToken = :refreshToken, u.isLogin = :isLogin where u.id = :id")
     void updateRefreshTokenAndLoginStatus(Long id, String refreshToken, Boolean isLogin);

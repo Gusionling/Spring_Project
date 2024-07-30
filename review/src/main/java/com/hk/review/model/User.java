@@ -20,6 +20,9 @@ public class User {
     @Column(name = "serial_id", nullable = false, unique = true)
     private Long serialId;
 
+    @Column(name = "is_new_user")
+    @Setter private Boolean isNewUser;
+
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
@@ -39,6 +42,7 @@ public class User {
     public User(Long serialId) {
         this.serialId = serialId;
         this.isLogin = true;
+        this.isNewUser = true;
         this.createdAt = LocalDateTime.now();
         this.nickname = Constrants.USER_NICKNAME_PREFIX + serialId;
     }

@@ -1,8 +1,10 @@
 package com.hk.review.security.handler.oauth;
 
 import com.hk.review.contrant.Constrants;
+import com.hk.review.model.User;
 import com.hk.review.model.dto.response.JwtTokenDto;
 import com.hk.review.oauth.info.KakaoUserInfo;
+import com.hk.review.repository.UserRepository;
 import com.hk.review.security.enums.ERole;
 import com.hk.review.security.service.CustomUserDetailService;
 import com.hk.review.utility.JwtUtil;
@@ -28,24 +30,31 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailService customUserDetailService;
+    private final UserRepository userRepository;
 
     @Override
-
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
         System.out.println("OAuth2AuthenticationSuccessHandler: Authentication 들어옴");
 
-        Long userId = ((Number) kakaoUserInfo.getAttributes().get(Constrants.KAKAO_ID)).longValue();
+        Long serialId = ((Number) kakaoUserInfo.getAttributes().get(Constrants.KAKAO_ID)).longValue();
+
+        User user = userRepository.findBySerialId(serialId).orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다"));
+
 
         //토큰 발급
-        JwtTokenDto tokens = jwtUtil.generateTokens(userId, ERole.USER);
+        JwtTokenDto tokens = jwtUtil.generateTokens(user.getId(), ERole.USER);
+
+        if (!user.getIsNewUser() || !tokens.refreshToken().equals(user.getRefreshToken())) {
+            userRepository.updateRefreshTokenAndLoginStatus(user.getId(), tokens.refreshToken(), true);
+        }
 
         String redirectUrI = String.format(REDIRECT_URL, tokens.accessToken(), tokens.refreshToken());
         getRedirectStrategy().sendRedirect(request, response, redirectUrI);
 
-        System.out.println("OAuth2AuthenticationSuccessHandler: Authentication successful");
+
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
