@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpAndSignInRequest {
+public class SignUpRequest {
 
     @NotBlank
     @Schema(description = "providerId", example = "203912941")

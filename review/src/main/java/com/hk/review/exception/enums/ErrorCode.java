@@ -23,6 +23,7 @@ public enum ErrorCode {
     NOT_FOUND_BRANCH(40402, HttpStatus.NOT_FOUND, "해당 브랜치가 존재하지 않습니다."),
     NOT_FOUND_REGION(40403, HttpStatus.NOT_FOUND, "해당 지역이 존재하지 않습니다."),
     NOT_FOUND_HISTORY(40404, HttpStatus.NOT_FOUND, "해당 코디 기록이 존재하지 않습니다."),
+    NOT_FOUND_PASSWORD(40405, HttpStatus.NOT_FOUND, "비밀번호가 일치하지 않습니다."),
 
 
     // Invalid Argument Error

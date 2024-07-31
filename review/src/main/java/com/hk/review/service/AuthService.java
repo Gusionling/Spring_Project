@@ -1,6 +1,7 @@
 package com.hk.review.service;
 
-import com.hk.review.api.request.SignUpAndSignInRequest;
+import com.hk.review.api.request.SignInRequest;
+import com.hk.review.api.request.SignUpRequest;
 import com.hk.review.contrant.Constrants;
 import com.hk.review.exception.CommonException;
 import com.hk.review.exception.enums.ErrorCode;
@@ -51,7 +52,7 @@ public class AuthService {
     }
 
     @Transactional
-    public JwtTokenDto signUp(SignUpAndSignInRequest request) {
+    public JwtTokenDto signUp(SignUpRequest request) {
 
         //전역변수로 두기 위해
         User user;
@@ -87,6 +88,24 @@ public class AuthService {
         JwtTokenDto jwtTokenDto = jwtUtil.generateTokens(user.getId(), ERole.USER);
 
         user.setRefreshToken(jwtTokenDto.refreshToken());
+
+        return jwtTokenDto;
+    }
+
+    public JwtTokenDto signIn(SignInRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_USER));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new CommonException(ErrorCode.NOT_FOUND_PASSWORD);
+        }
+
+        JwtTokenDto jwtTokenDto = jwtUtil.generateTokens(user.getId(), ERole.USER);
+
+        if (!jwtTokenDto.refreshToken().equals(user.getRefreshToken())) {
+            userRepository.updateRefreshTokenAndLoginStatus(user.getId(), jwtTokenDto.refreshToken(), true);
+        }
 
         return jwtTokenDto;
     }

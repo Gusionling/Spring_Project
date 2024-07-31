@@ -1,6 +1,7 @@
 package com.hk.review.api;
 
-import com.hk.review.api.request.SignUpAndSignInRequest;
+import com.hk.review.api.request.SignInRequest;
+import com.hk.review.api.request.SignUpRequest;
 import com.hk.review.api.response.KakaoLoginResponse;
 import com.hk.review.contrant.Constrants;
 import com.hk.review.model.dto.ResponseDto;
@@ -46,10 +47,20 @@ public class AuthController {
             description = "회원가입 후 토큰을 반환합니다. 카카오 로그인인 경우는 카카오 인증을 먼저 받고 실행해주세요 platform은 kakao혹은 general을 입력해주세요"
     )
     @PostMapping("/sign-up")
-    public ResponseDto<?> signUp(@RequestBody SignUpAndSignInRequest request) {
+    public ResponseDto<?> signUp(@RequestBody SignUpRequest request) {
 
         return ResponseDto.ok(authService.signUp(request));
 
+    }
+
+    @Operation(
+            summary = "로그인",
+            description = "로그인 후 토큰을 반환합니다."
+    )
+    @PostMapping("/sign-in")
+    public ResponseDto<JwtTokenDto> signIn(@RequestBody SignInRequest request) {
+
+        return ResponseDto.ok(authService.signIn(request));
     }
 
 }
