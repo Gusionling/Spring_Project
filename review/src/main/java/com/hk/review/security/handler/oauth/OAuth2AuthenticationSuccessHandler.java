@@ -26,7 +26,7 @@ import java.io.IOException;
 //이 클래스는 인증이 성공적으로 완료 되었을 때 실행이 되는 친구이다. 그렇기 때문에 인증이 안되면 여기까지 오지 못한다.
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private static final String REDIRECT_URL = "http://localhost:8080/api/v1/auth/oauth2/kakao?accessToken=%s&refreshToken=%s";
+    private static final String REDIRECT_URL = "http://localhost:8080/api/v1/auth/oauth2/kakao?accessToken=%s&refreshToken=%s&providerId=%d";
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailService customUserDetailService;
@@ -51,7 +51,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             userRepository.updateRefreshTokenAndLoginStatus(user.getId(), tokens.refreshToken(), true);
         }
 
-        String redirectUrI = String.format(REDIRECT_URL, tokens.accessToken(), tokens.refreshToken());
+        String redirectUrI = String.format(REDIRECT_URL, tokens.accessToken(), tokens.refreshToken(), serialId);
         getRedirectStrategy().sendRedirect(request, response, redirectUrI);
 
 

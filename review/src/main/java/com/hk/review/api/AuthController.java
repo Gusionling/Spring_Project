@@ -1,6 +1,7 @@
 package com.hk.review.api;
 
 import com.hk.review.api.request.SignUpAndSignInRequest;
+import com.hk.review.api.response.KakaoLoginResponse;
 import com.hk.review.contrant.Constrants;
 import com.hk.review.model.dto.ResponseDto;
 import com.hk.review.model.dto.UserLoginDto;
@@ -34,9 +35,10 @@ public class AuthController {
     //새로운 providerID 아니면 그냥 기존으로 주자
     @Operation(summary = "카카오 로그인", description = "카카오 로그인 handler의 콜백 메서드이다.")
     @GetMapping("/oauth2/kakao")
-    public ResponseEntity<JwtTokenDto> loginKakao(@RequestParam(name = "accessToken") String accessToken,
-                                     @RequestParam(name = "refreshToken") String refreshToken) {
-        return new ResponseEntity<>(JwtTokenDto.of(accessToken, refreshToken), HttpStatus.OK);
+    public ResponseEntity<KakaoLoginResponse> loginKakao(@RequestParam(name = "accessToken") String accessToken,
+                                     @RequestParam(name = "refreshToken") String refreshToken, @RequestParam(name = "providerId") Long providerId) {
+
+        return new ResponseEntity<>(KakaoLoginResponse.of(accessToken,refreshToken,providerId), HttpStatus.OK);
     }
 
     @Operation(
