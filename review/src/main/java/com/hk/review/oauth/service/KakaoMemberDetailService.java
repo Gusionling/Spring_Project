@@ -1,5 +1,6 @@
 package com.hk.review.oauth.service;
 
+import com.hk.review.contrant.Constrants;
 import com.hk.review.model.User;
 import com.hk.review.oauth.info.KakaoMemberDetails;
 import com.hk.review.oauth.info.KakaoUserInfo;
@@ -41,6 +42,7 @@ public class KakaoMemberDetailService extends DefaultOAuth2UserService {
                     .build());
             //얘는 항상 true인데 이경우에만 false로 바꿔준다. (kakao로그인 시에만)
             user.setIsNewUser(false);
+            user.setPlatform(Constrants.PLATFORM_KAKAO);
         }
 
         return KakaoMemberDetails.createByProviderId(user.getSerialId(), oAuth2User);

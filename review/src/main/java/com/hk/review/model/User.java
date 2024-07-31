@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 public class User {
@@ -21,13 +22,19 @@ public class User {
     private Long serialId;
 
     @Column(name = "is_new_user")
-    @Setter private Boolean isNewUser;
+    private Boolean isNewUser;
+
+    @Column(name = "platform")
+    private String platform;
 
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
     @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "password", length = 256)
+    private String password;
 
     @Column(name = "refresh_token")
     private String refreshToken;

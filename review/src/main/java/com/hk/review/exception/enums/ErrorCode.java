@@ -11,6 +11,9 @@ public enum ErrorCode {
     // Method Not Allowed Error
     METHOD_NOT_ALLOWED(40500, HttpStatus.METHOD_NOT_ALLOWED, "지원하지 않는 HTTP 메소드입니다."),
 
+
+    EXIST_EMAIL(40901, HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
+
     // Not Found Error
     NOT_FOUND_END_POINT(40400, HttpStatus.NOT_FOUND, "존재하지 않는 API 엔드포인트입니다."),
     NOT_FOUND_RESOURCE(40400, HttpStatus.NOT_FOUND, "해당 리소스가 존재하지 않습니다."),

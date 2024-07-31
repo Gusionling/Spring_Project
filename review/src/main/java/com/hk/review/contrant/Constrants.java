@@ -12,11 +12,14 @@ public class Constrants {
     public static final String REGION_TYPE = "H";
     public static final String USER_NICKNAME_PREFIX = "USER_";
 
+    public static final String PLATFORM_GENERAL = "general";
+
 
     public static final String KAKAO_ACCOUNT = "kakao_account";
     public static final String KAKAO_EMAIL = "email";
     public static final String KAKAO_ID = "id"; // ID를 위한 상수
     public static final String KAKAO_PREFIX = "낯선 ";
+    public static final String PLATFORM_KAKAO = "kakao";
 
     public static List<String> NO_NEED_AUTH_URLS = List.of(
             "/v3/api-docs.html/**",
